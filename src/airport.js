@@ -1,4 +1,5 @@
-let Airport = function() {
+let Airport = function(capacity) {
+  this._capacity = capacity || 3;
   this._hanger = [];
 };
 
