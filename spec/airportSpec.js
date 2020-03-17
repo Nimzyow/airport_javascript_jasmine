@@ -37,6 +37,7 @@ describe("airport.js", function() {
       plane1.flight_number = "1";
       plane2 = jasmine.createSpy("plane2", ["flight_number"]);
       plane2.flight_number = "2";
+      spyOn(airport, "is_stormy").and.returnValue(false);
     });
 
     it("lands plane", () => {
@@ -58,6 +59,7 @@ describe("airport.js", function() {
       plane2.flight_number = "2";
       plane3 = jasmine.createSpy("plane3", ["flight_number"]);
       plane3.flight_number = "3";
+      spyOn(airport, "is_stormy").and.returnValue(false);
     });
     it("takes off plane", () => {
       airport.land_plane(plane1);
@@ -75,7 +77,12 @@ describe("airport.js", function() {
 
   describe("other method functionality", () => {
     it("is_stormy returns false", () => {
+      spyOn(Math, "random").and.returnValue(0.3);
       expect(airport.is_stormy()).toBe(false);
+    });
+    it("is_stormy returns true", () => {
+      spyOn(Math, "random").and.returnValue(0.6);
+      expect(airport.is_stormy()).toBe(true);
     });
   });
 
@@ -85,12 +92,21 @@ describe("airport.js", function() {
       plane1 = jasmine.createSpy("plane1", ["flight_number"]);
       plane1.flight_number = "1";
     });
+
     it("prevents takeoff when weather is stormy", () => {
+      spyOn(airport, "is_stormy").and.returnValue(false);
       airport.land_plane(plane1);
-      spyOn(airport, "is_stormy").and.returnValue(true);
+      airport.is_stormy.and.returnValue(true);
       expect(() => {
         airport.take_off_plane("1");
       }).toThrowError("It's stormy, can't take off plane");
+    });
+
+    it("prevents landing when weather is stormy", () => {
+      expect(() => {
+        spyOn(airport, "is_stormy").and.returnValue(true);
+        airport.land_plane(plane1);
+      }).toThrowError("Weather stormy, can't land plane");
     });
   });
 });

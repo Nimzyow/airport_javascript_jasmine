@@ -3,8 +3,11 @@ let Airport = function() {
 };
 
 Airport.prototype.land_plane = function(plane) {
-  this._hanger.push(plane);
-  console.info(plane.flight_number);
+  if (!this.is_stormy()) {
+    this._hanger.push(plane);
+  } else {
+    throw new Error("Weather stormy, can't land plane");
+  }
 };
 
 Airport.prototype.take_off_plane = function(flight_number) {
@@ -27,7 +30,7 @@ Airport.prototype.store_plane = function(flight_number) {
 Airport.prototype.is_full = function() {};
 
 Airport.prototype.is_stormy = function() {
-  return false;
+  return Math.random() > 0.5;
 };
 
 Airport.prototype.hanger = function() {
