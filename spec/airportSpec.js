@@ -72,4 +72,25 @@ describe("airport.js", function() {
       expect(airport.hanger()).not.toContain(plane2);
     });
   });
+
+  describe("other method functionality", () => {
+    it("is_stormy returns false", () => {
+      expect(airport.is_stormy()).toBe(false);
+    });
+  });
+
+  describe("error handling", () => {
+    let plane1;
+    beforeEach(() => {
+      plane1 = jasmine.createSpy("plane1", ["flight_number"]);
+      plane1.flight_number = "1";
+    });
+    it("prevents takeoff when weather is stormy", () => {
+      airport.land_plane(plane1);
+      spyOn(airport, "is_stormy").and.returnValue(true);
+      expect(() => {
+        airport.take_off_plane("1");
+      }).toThrowError("It's stormy, can't take off plane");
+    });
+  });
 });
